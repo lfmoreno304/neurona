@@ -8,8 +8,7 @@ const Multicapa = () => {
     const [neuronas3, setNeuronas3] = useState()
     const [entradas, setEntradas] = useState()
     const [salidas, setSalidas] = useState()
-    const [entradaCapa, setEntradaCapa] = useState()
-    const [capaSalida, setCapaSalida] = useState()
+    const [patrones, setPatrones] = useState()
     const handleOpcion = (e) => {
         setOpcion(e.target.value)
     }
@@ -28,6 +27,7 @@ const Multicapa = () => {
         const fileReader = new FileReader()
         fileReader.readAsText(file)
         fileReader.onload = () => {
+            setPatrones(fileReader.result.split("\r\n").length)
             setEntradas(fileReader.result.split("\r\n")[0].split("|")[0].length)
             setSalidas(fileReader.result.split("\r\n")[0].split("|")[1].length)
         }
@@ -47,7 +47,6 @@ const Multicapa = () => {
                 eCapa = eCapa.concat("\n")
             }
         } while (i < entradas * neuronas)
-        setEntradaCapa(eCapa)
         let j = 0
         let nums2
         let cSalida = ""
@@ -75,7 +74,6 @@ const Multicapa = () => {
             text = text.concat(nums3 + "\n")
             l++
         } while (l < salidas);
-        setCapaSalida(cSalida)
         const capa1 = new Blob([eCapa], { type: 'text/plain;charset=utf-8' })
         const capaSalida1 = new Blob([cSalida], { type: 'text/plain;charset=utf-8' })
         const umbralCapa = new Blob([text2], { type: 'text/plain;charset=utf-8' })
@@ -97,7 +95,7 @@ const Multicapa = () => {
                 eCapa = eCapa.concat("\n")
             }
         } while (i < entradas * neuronas)
-        setEntradaCapa(eCapa)
+
         let q = 0
         let n
         let cCapa = ""
@@ -144,7 +142,7 @@ const Multicapa = () => {
             text = text.concat(nums3 + "\n")
             l++
         } while (l < salidas);
-        setCapaSalida(cSalida)
+
         const capa1 = new Blob([eCapa], { type: 'text/plain;charset=utf-8' })
         const capa2 = new Blob([cCapa], { type: 'text/plain;charset=utf-8' })
         const capaSalida1 = new Blob([cSalida], { type: 'text/plain;charset=utf-8' })
@@ -171,7 +169,7 @@ const Multicapa = () => {
                 eCapa = eCapa.concat("\n")
             }
         } while (i < entradas * neuronas)
-        setEntradaCapa(eCapa)
+
         let q = 0
         let n
         let cCapa = ""
@@ -183,7 +181,7 @@ const Multicapa = () => {
                 cCapa = cCapa.concat("\n")
             }
         } while (q < neuronas * neuronas2);
-        let h =0
+        let h = 0
         let nume
         let ccCapa = ""
         do {
@@ -237,7 +235,7 @@ const Multicapa = () => {
             text = text.concat(nums3 + "\n")
             l++
         } while (l < salidas);
-        setCapaSalida(cSalida)
+
         const capa1 = new Blob([eCapa], { type: 'text/plain;charset=utf-8' })
         const capa2 = new Blob([cCapa], { type: 'text/plain;charset=utf-8' })
         const capa3 = new Blob([ccCapa], { type: 'text/plain;charset=utf-8' })
@@ -259,15 +257,22 @@ const Multicapa = () => {
         <>
             <Navbar />
             <div className="container">
+                <br/>
                 <form>
+                    <label className="form-label">Seleccione el archivo</label>
+                    <input onChange={readFile} className="form-control" type="file" />
+                    <label className="form-label">Numero de entradas: {entradas}</label>
+                    <br />
+                    <label className="form-label">Numero de salidas: {salidas}</label>
+                    <br />
+                    <label className="form-label">Numero de patrones: {patrones}</label>
+                    <br />
                     <label className="form-label">Seleccione el numero de capas</label>
                     <select value={opcion} onChange={handleOpcion} className="form-select">
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>
                     </select>
-                    <label className="form-label">Seleccione el archivo</label>
-                    <input onChange={readFile} className="form-control" type="file" />
                     {opcion == 1 ? <>
                         <label className="form-label">Digite el numero de neuronas </label>
                         <input onChange={handleNeuronas} className="form-control" type="number" />
@@ -340,14 +345,29 @@ const Multicapa = () => {
                                     <option>gausiana</option>
                                 </select>
                             </>}
+                    <label className="form-label">Seleccionar funcion de activiacion de la capa de salida</label>
+                    <select className="form-select">
+                        <option>Escalon</option>
+                        <option>Sigmoide</option>
+                        <option>Tangente hiperbolica</option>
+                        <option>seno</option>
+                        <option>coseno</option>
+                        <option>gausiana</option>
+                    </select>
                     <label className="form-label">Seleccionar algoritmo de entrenamiento</label>
                     <select className="form-select">
                         <option>Regla delta</option>
                         <option>Propagacion inversa</option>
                     </select>
+                    <label className="form-label">Numero de iteraciones </label>
+                    <input className="form-control" type="number" />
+                    <label className="form-label">Rata de aprendizaje </label>
+                    <input className="form-control" type="number"/>
+                    <label className="form-label">Error maximo permitido </label>
+                    <input className="form-control" type="number"/>
                     <br />
-                    <button type="button" onClick={opcion == 1 ? handlePesoCapa1 : 
-                    opcion ==2 ? handlePesoCapa2: handlePesoCapa3}
+                    <button type="button" onClick={opcion == 1 ? handlePesoCapa1 :
+                        opcion == 2 ? handlePesoCapa2 : handlePesoCapa3}
                         className="btn btn-primary">descargar</button>
                 </form>
             </div>
